@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__)."/../../common/includes/exceptions.php");
+include_once(dirname(__FILE__)."/../includes/exceptions.php");
 
 /**
  * Base class for all CI app models

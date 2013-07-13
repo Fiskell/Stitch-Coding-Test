@@ -29,9 +29,6 @@ class BaseException extends Exception
 		return "<pre>".$this->toString()."</pre>";
 	}
 }
-/// Connection to MES did not work
-class MESConnectionFailedException extends BaseException { }
-
 /// Database driver or engine reported an error
 class DbException extends BaseException { }
 
