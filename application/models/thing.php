@@ -94,17 +94,18 @@ class Thing extends Fancymodel
     $variants = array(); 
     foreach($thingVariants as $thingVariants)
       $variants[] = Variant::load($thingVariants);
+    return $variants;
 
     //encode json
-    $json = array();
-    foreach($variants as $variant)
-      $json[] = $variant->toJson();
+    //$json = array();
+    //foreach($variants as $variant)
+      //$json[] = $variant->toJson();
 
     //$json = json_encode($json, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_QUOT);
 
-    echo "<pre>";
-    print_r($json);
-    echo "</pre>";
+    //echo "<pre>";
+    //print_r($json);
+    //echo "</pre>";
     //return $products;
   }
   /*
@@ -130,18 +131,16 @@ class Thing extends Fancymodel
     $products = array(); 
     foreach($thingProducts as $thingProduct)
       $products[] = Product::load($thingProduct);
+    return $products;
 
-    //encode json
-    $json = array();
-    foreach($products as $product)
-      $json[] = $product->toJson();
+/*
 
     //$json = json_encode($json, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_QUOT);
 
     echo "<pre>";
     print_r($json);
     echo "</pre>";
-    //return $products;
+*/
   }
 
   public function getChildThings($thingName)

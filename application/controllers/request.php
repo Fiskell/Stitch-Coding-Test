@@ -23,19 +23,25 @@ class Request extends CI_Controller
 
     //request/products
     if(is_null($product_id))
-      $products = Thing::getProducts();
+      $response = Thing::getProducts();
 
     //request/products/{product_id}
     else if(!is_null($product_id) && is_null($fourth))
-      $products = Thing::getProducts($product_id);
+      $response = Thing::getProducts($product_id);
 
     //request/products/{product_id}/variants
     else if(!is_null($fourth) && is_null($variant_id))
-      $products = Thing::getVariants($product_id);
+      $response = Thing::getVariants($product_id);
     
     //$products = Thing::getProducts($id, $fields);
     else if(!is_null($fourth) && !is_null($variant_id))
-      $products = Thing::getVariants($product_id, $variant_id);
+      $response = Thing::getVariants($product_id, $variant_id);
+
+    //encode json
+    $responseProd = array();
+    foreach($response as $rsp)
+      $responseProd[] = $rsp->toJson();
+    echo json_encode($responseProd, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_QUOT);
   }
 
 /*------------------------*/
@@ -55,11 +61,33 @@ class Request extends CI_Controller
     if($this->uri->segment(3) !== false)
       $product_id = $this->uri->segment(3);
 
-    $product = Product::loadByAltId($product_id);
+    $variants = Thing::getVariants($product_id);
+    $type_a = array();   
+    $type_b = array();
+    //get all options
+    foreach($variants as $variant)
+    {
+      $fields = $variant->getFields();
+      $type_a[] = $fields['option2']->getValue();
+      $type_b[] = $fields['option3']->getValue();
+    }
 
-    $options = Option::getByProduct($product);
-
-      
+    //remove duplicates
+    $type_a = array_unique($type_a);
+    $type_b = array_unique($type_b);
+    foreach($type_a as $a)
+    {
+      foreach($type_b as $b)
+      {
+        $combos[] = Combo::load($a, $b); 
+      }
+    }
+    
+    //encode json
+    $comboJson = array();
+    foreach($combos as $combo)
+      $comboJson[] = $combo->toJson();
+    echo json_encode($comboJson, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_QUOT);
   }
   
 /*------------------------*/
