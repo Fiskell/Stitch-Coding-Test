@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('shopify_api', 'product', 'variant');
+$autoload['model'] = array('shopify_api', 'product', 'variant', 'thing', 'data', 'channel');
 
 
 /* End of file autoload.php */

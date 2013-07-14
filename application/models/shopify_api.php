@@ -38,7 +38,7 @@ class Shopify_api
 
     curl_close($curl);
 
-    $decoded = json_decode($response);
+    $decoded = json_decode($response, true);
     return $decoded;
   }
 }
