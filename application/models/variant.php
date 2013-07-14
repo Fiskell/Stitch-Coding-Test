@@ -26,6 +26,15 @@ class Variant
     return $variant;
   }
 
+  public function toJson()
+  {
+    $json = array();
+    //add 
+    foreach($this->fields as $field)
+      $json[$field->getKey()] = $field->getValue();
+    return $json;
+  }
+
   function __construct()
   {
   } 

@@ -6,25 +6,37 @@ class Request extends CI_Controller
 /*------------------------*/
 
   /*
-  *Products
-  *
-  *
+  *Products and Variants
   */ 
-  // /request/products  //all products
-  // /request/products/#{id}  //single product
-  public function products($id=null, $fields=null)
+  public function products()
   {
-    $products = Thing::getProducts($id, $fields);  
+    $product_id = null;
+    $fourth = null;
+    $variant_id = null;
+
+    if($this->uri->segment(3) !== false)
+      $product_id = $this->uri->segment(3);
+    if($this->uri->segment(4) !== false)
+      $fourth = $this->uri->segment(4); 
+    if($this->uri->segment(5) !== false)
+      $variant_id = $this->uri->segment(5);
+
+    //request/products
+    if(is_null($product_id))
+      $products = Thing::getProducts();
+
+    //request/products/{product_id}
+    else if(!is_null($product_id) && is_null($fourth))
+      $products = Thing::getProducts($product_id);
+
+    //request/products/{product_id}/variants
+    else if(!is_null($fourth) && is_null($variant_id))
+      $products = Thing::getVariants($product_id);
+    
+    //$products = Thing::getProducts($id, $fields);
+    else if(!is_null($fourth) && !is_null($variant_id))
+      $products = Thing::getVariants($product_id, $variant_id);
   }
-
-  /*------------------------*/
-
-  /*
-  *Variants
-  */ 
-
-  // /request/products/#{id}/variant  //all variants for a product
-  // /request/variant/#{id} //single variant
 
 /*------------------------*/
 
@@ -36,6 +48,20 @@ class Request extends CI_Controller
   /*
   *Combos
   */ 
+  public function combos()
+  {
+    $product_id = null;
+
+    if($this->uri->segment(3) !== false)
+      $product_id = $this->uri->segment(3);
+
+    $product = Product::loadByAltId($product_id);
+
+    $options = Option::getByProduct($product);
+
+      
+  }
+  
 /*------------------------*/
 
 /*------------------------*/

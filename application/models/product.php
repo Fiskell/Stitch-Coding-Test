@@ -1,5 +1,4 @@
 <?php 
-include_once(dirname(__FILE__)."/../includes/FancyModel.php");
 class Product
 {
   protected $thing = null;
@@ -12,8 +11,8 @@ class Product
   public function getThing() { return $this->thing; }
   public function setThing($val) {    $this->thing = $val; }
 
-  public function getMembers() { return $this->members; }
-  public function setMembers($val) {    $this->members = $val; }
+  public function getFields() { return $this->fields; }
+  public function setFields($val) {    $this->fields = $val; }
 
   public function getVariants() { return $this->variants; }
   public function setVariants($val) {    $this->variants = $val; }
@@ -31,11 +30,11 @@ class Product
     $product->thing = $thing;
     
     //members
-    $members_raw = $product->thing->getData();
-    $tmpMembers = array();
-    foreach($members_raw as $member)
-      $tmpMembers[$member->getKey()] = $member;
-    $product->members = $tmpMembers;
+    $fields_raw = $product->thing->getData();
+    $tmpFields = array();
+    foreach($fields_raw as $field)
+      $tmpFields[$field->getKey()] = $field;
+    $product->fields = $tmpFields;
 
     //variants
     $thingVariants = $product->thing->getChildThings("variant");
@@ -51,5 +50,30 @@ class Product
       $options[] = Option::load($thingOptions);
     $product->options = $options;
     return $product;
+  }
+
+  public function toJson()
+  {
+    $json = array();
+    //add 
+    foreach($this->fields as $field)
+      $json[$field->getKey()] = $field->getValue();
+
+    $jsonVariants = array();
+    foreach($this->variants as $variant)
+      $jsonVariants[] = $variant->toJson();
+    $json["variants"] = $jsonVariants;
+
+    $jsonOptions = array();
+    foreach($this->options as $options)
+      $jsonOptions[] = $options->toJson();
+    $json["options"] = $jsonOptions;
+
+    return $json;
+  }
+
+  public function getCombos()
+  {
+   
   }
 }

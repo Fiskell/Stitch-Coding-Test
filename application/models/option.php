@@ -23,4 +23,33 @@ class Option
     $option->fields = $tmpFields;
     return $option;
   } 
+
+  public function toJson()
+  {
+    $json = array();
+    //add 
+    foreach($this->fields as $field)
+      $json[$field->getKey()] = $field->getValue();
+    return $json;
+  }
+
+  /// @returns array of options related to product
+  public function getByProduct($product)
+  {
+    $this->db->select();
+    $this->db->from('thing');
+    $this->db->where('thing_id', $product->getThing()->getId());
+    $query = $this->db->get();
+    
+    $thingOptions = array();
+    foreach($query->result() as $row)
+      $thingOptions[] = Thing::loadFromRow($row);
+  
+    //get options
+    $options = array(); 
+    foreach($thingOptions as $thingOptions)
+      $options[] = Option::load($thingOptions);
+   
+    return $options; 
+  }
 }
