@@ -52,9 +52,50 @@ class Thing extends Fancymodel
       throw new InstanceNotFoundException("No instance found with altid " . $_id);
 
     foreach($query->result() as $row)
-    {
       return Thing::loadFromRow($row);
-    }
   }
 
+  public static function getProducts($id, $fields)
+  {
+    $obj = new Thing();
+    $obj->db->select();
+    $obj->db->from('thing');
+    $obj->db->where('name = "product"');
+    if(!is_null($id))
+      $obj->db->where('altid', $id);
+    $query = $obj->db->get();
+
+    $thingProducts = array();
+    foreach($query->result() as $row)
+      $thingProducts[] = Thing::loadFromRow($row);
+    
+    //echo "<pre>";
+    //print_r($thingProducts);
+    //echo "</pre>";
+    $products = array(); 
+    foreach($thingProducts as $thingProduct)
+    {
+      $products[] = Product::load($thingProduct);
+    }
+    echo "<pre>";
+    print_r($products);
+    echo "</pre>";
+    //return $products;
+  }
+
+  public function getChildThings($thingName)
+  {
+    $this->db->select();
+    $this->db->from('thing');
+    $this->db->where('name', $thingName);
+    $this->db->where('thing_id', $this->getId());
+    $query = $this->db->get();
+  
+    $children = array();
+    foreach($query->result() as $row)
+    {
+      $children[] = Thing::loadFromRow($row);
+    }
+    return $children;
+  }
 }

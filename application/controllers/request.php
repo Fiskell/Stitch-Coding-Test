@@ -14,7 +14,7 @@ class Request extends CI_Controller
   // /request/products/#{id}  //single product
   public function products($id=null, $fields=null)
   {
-      
+    $products = Thing::getProducts($id, $fields);  
   }
 
   /*------------------------*/

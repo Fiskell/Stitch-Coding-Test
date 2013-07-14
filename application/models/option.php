@@ -1,6 +1,6 @@
 <?php 
 include_once(dirname(__FILE__)."/../includes/FancyModel.php");
-class Variant
+class Option
 {
   protected $thing = null;
   protected $fields = array();
@@ -10,24 +10,17 @@ class Variant
 
   public function getFields() { return $this->fields; }
   public function setFields($val) {    $this->fields = $val; }
-
+ 
   public static function load($thing)
   {
-    $variant = new Variant();
-    $variant->thing = $thing;
-    //members
-    $field_raw = $variant->thing->getData();
+    $option = new Option();
+    $option->thing = $thing;
+    $field_raw = $option->thing->getData();
     $tmpFields = array();
     foreach($field_raw as $field)
       $tmpFields[$field->getKey()] = $field;
 
-    $variant->fields = $tmpFields;
-
-    return $variant;
-  }
-
-  function __construct()
-  {
+    $option->fields = $tmpFields;
+    return $option;
   } 
 }
-
